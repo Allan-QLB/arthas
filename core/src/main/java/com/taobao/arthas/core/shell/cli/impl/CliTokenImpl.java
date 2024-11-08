@@ -6,6 +6,7 @@ import io.termd.core.readline.LineStatus;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
@@ -100,12 +101,17 @@ public class CliTokenImpl implements CliToken {
         return separateLeadingAndTailingSymbol(tokens, PIPE, REDIRECT_APPEND, REDIRECT);
     }
 
+    private static boolean isQuotedTokenValue(String raw, String value) {
+        return Objects.equals(raw, "\"" + value + "\"")
+                || Objects.equals(raw, "'" + value + "'");
+    }
+
     private static List<CliToken> separateLeadingAndTailingSymbol(List<CliToken> tokens, String... symbols) {
         List<CliToken> adjustedTokens = new ArrayList<>();
         for (CliToken token : tokens) {
             String value = token.value();
             String raw = token.raw();
-            if ("<init>".equals(value) || "<clinit>".equals(value)) {
+            if (isQuotedTokenValue(raw, value) || "<init>".equals(value) || "<clinit>".equals(value)) {
                 adjustedTokens.add(token);
                 continue;
             }

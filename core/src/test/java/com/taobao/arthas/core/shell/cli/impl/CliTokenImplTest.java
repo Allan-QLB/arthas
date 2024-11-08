@@ -344,7 +344,7 @@ public class CliTokenImplTest {
     @Test
     public void testSeparateRedirect2() {
         String[] expectedTextTokenValue = new String[]{"watch", "demo.MathGame", "<init>"};
-        String cmd = "watch demo.MathGame '<init>'";
+        String cmd = "watch demo.MathGame \"<init>\"";
         List<CliToken> actualTokens = CliTokenImpl.tokenize(cmd);
         assertEqualsIgnoreBlank(expectedTextTokenValue, actualTokens);
         Assert.assertEquals(cmd, concatRaw(actualTokens));
@@ -363,6 +363,11 @@ public class CliTokenImplTest {
 
         expectedTextTokenValue = new String[]{"watch", "demo.MathGame", "<clinit>", "#cost> 100"};
         cmd = "watch demo.MathGame <clinit> '#cost> 100'";
+        actualTokens = CliTokenImpl.tokenize(cmd);
+        assertEqualsIgnoreBlank(expectedTextTokenValue, actualTokens);
+        Assert.assertEquals(cmd, concatRaw(actualTokens));
+        expectedTextTokenValue = new String[]{"watch", "demo.MathGame", "<clinit>", "> 100"};
+        cmd = "watch demo.MathGame <clinit> '> 100'";
         actualTokens = CliTokenImpl.tokenize(cmd);
         assertEqualsIgnoreBlank(expectedTextTokenValue, actualTokens);
         Assert.assertEquals(cmd, concatRaw(actualTokens));
