@@ -105,6 +105,10 @@ public class CliTokenImpl implements CliToken {
         for (CliToken token : tokens) {
             String value = token.value();
             String raw = token.raw();
+            if ("<init>".equals(value) || "<clinit>".equals(value)) {
+                adjustedTokens.add(token);
+                continue;
+            }
             boolean handled = false;
             for (String symbol : symbols) {
                 if (value.equals(symbol)) {
